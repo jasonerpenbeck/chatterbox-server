@@ -71,8 +71,8 @@ app.fetch = function (callback,room) {
   }
 
   $.ajax({
-    url: this.server, // we fetch the most recent 50 messages for now
-    // data: parameters,
+    url: this.server,
+    data: {"order": "-createAt"},
     type: 'GET',
     dataType: 'json',
     success: function(data) {
@@ -91,8 +91,9 @@ app.clearMessages = function() {
 
 app.addMessages = function(results) {
   app.clearMessages();
-  console.log(results);
+
   results = results.results;
+
   for(var i =0; i < results.length; i++) {
     console.log('results [i]',results[i]);
     app.addMessage(results[i]);
@@ -157,6 +158,7 @@ app.handleSubmit = function() {
   message.username = app.username || 'Anonymous';
   message.text = $('#message').val();
   message.roomname = app.roomChoice;
+  console.log(message)
 
   app.send(message,app.displayMessage);
   // app.fetch(app.addMessages,app.roomChoice);
