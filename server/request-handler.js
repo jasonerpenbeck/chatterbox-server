@@ -6,40 +6,64 @@
  * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
 
 var handleRequest = function(request, response) {
-  /* the 'request' argument comes from nodes http module. It includes info about the
-  request - such as what URL the browser is requesting. */
 
-  /* Documentation for both request and response can be found at
-   * http://nodemanual.org/0.8.14/nodejs_ref_guide/http.html */
 
-  console.log("Serving request type " + request.method + " for url " + request.url);
+  var messageObj = {
+    createdAt: "2014-09-29T23:07:12.462Z",
+    objectID: "f08ibCIQBV",
+    roomname: "default",
+    text: "This is a test",
+    updatedAt: "2014-09-29T23:07:12.462Z",
+    username: "Josh"
+  };
 
-  var statusCode = 200;
+  var messageArray = [];
 
-  /* Without this line, this server wouldn't work. See the note
-   * below about CORS. */
-  var headers = defaultCorsHeaders;
+  var router = {
+    get: function() {
+      var responseObject = {results: messageArray};
+      respond(JSON.stringify(responseObject));
+    },
+    post: function() {
+      //create the messageobj and push it to the array <---
+      respond('hi');
+    },
+    def: function() {
+      respond('hi');
+    }
+  };
 
-  headers['Content-Type'] = "text/plain";
+  if (router[request.method]) {
+    router[request.method]();
+  }
+  else {
+    router.def();
+  }
 
-  /* .writeHead() tells our server what HTTP status code to send back */
-  response.writeHead(statusCode, headers);
+  var respond = function(arg) {
+    var statusCode = 200;
+    var headers = defaultCorsHeaders;
+    headers['Content-Type'] = "text/plain";
+    response.writeHead(statusCode, headers);
+    response.end(arg);
+  };
 
-  /* Make sure to always call response.end() - Node will not send
-   * anything back to the client until you do. The string you pass to
-   * response.end() will be the body of the response - i.e. what shows
-   * up in the browser.*/
-  response.end("Hello, World!");
+  var addMessage = function() {
+
+    //create a message object
+    //add that object to the messagesarray
+    //
+  };
+
+
 };
 
-/* These headers will allow Cross-Origin Resource Sharing (CORS).
- * This CRUCIAL code allows this server to talk to websites that
- * are on different domains. (Your chat client is running from a url
- * like file://your/chat/client/index.html, which is considered a
- * different domain.) */
+
 var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
   "access-control-allow-headers": "content-type, accept",
   "access-control-max-age": 10 // Seconds.
 };
+
+module.exports.handleRequest = handleRequest;
