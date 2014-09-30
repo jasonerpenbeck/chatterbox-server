@@ -6,7 +6,12 @@
  * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
 var messageArray = [];
 
-var handleRequest = function(request, response) {
+// use fs to store messages
+// create a file if none exists
+// append new messages to file
+//
+
+var handler = function(request, response) {
 
 
   // var messageObj = {
@@ -29,8 +34,6 @@ var handleRequest = function(request, response) {
 
   var router = {
     GET: function() {
-      console.log(request.url);
-      console.log(request.url.slice(0,13));
 
       if(request.url[1] === '?' || request.url === '/classes/messages' || request.url === '' || request.url.slice(0,13) === '/classes/room') {
         var responseObject = {results: messageArray};
@@ -84,4 +87,4 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
-exports.handler = handleRequest;
+exports.handler = handler;
