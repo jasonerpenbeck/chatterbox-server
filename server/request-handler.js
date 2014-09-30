@@ -1,28 +1,17 @@
+var fs = require('fs');
+var _ = require('underscore');
+
 /* You should implement your request handler function in this file.
  * And hey! This is already getting passed to http.createServer()
  * in basic-server.js. But it won't work as is.
  * You'll have to figure out a way to export this function from
  * this file and include it in basic-server.js so that it actually works.
  * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
-var messageArray = [];
-
-// use fs to store messages
-// create a file if none exists
-// append new messages to file
-//
 
 var handler = function(request, response) {
 
-
-  // var messageObj = {
-  //   createdAt: "2014-09-29T23:07:12.462Z",
-  //   objectID: "f08ibCIQBV",
-  //   roomname: "default",
-  //   text: "This is a test",
-  //   updatedAt: "2014-09-29T23:07:12.462Z",
-  //   username: "Josh"
-  // };
-
+  var messagelog = './files/MessageLog.txt';
+  // var messageArray = [];
 
   var respond = function(arg, statuscode) {
     var statusCode = statuscode;
@@ -34,10 +23,23 @@ var handler = function(request, response) {
 
   var router = {
     GET: function() {
-
       if(request.url[1] === '?' || request.url === '/classes/messages' || request.url === '' || request.url.slice(0,13) === '/classes/room') {
-        var responseObject = {results: messageArray};
-        respond(JSON.stringify(responseObject), 200);
+
+        fs.readFile(messagelog,'utf8', function(err, data) {
+          if(err) {
+            console.log(err);
+          } else {
+            var messageArray = data.trim().split('\n');
+            for (var i=0; i<messageArray.length; i++) {
+              console.log('messageArray pre-JSON: ',messageArray[i]);
+              messageArray[i] = JSON.parse(messageArray[i]);
+              console.log('messageArray post-JSON: ',messageArray[i]);
+              }
+            var responseObject = {results: messageArray};
+            respond(JSON.stringify(responseObject), 200);
+          }
+        });
+
       } else {
         respond('404', 404);
       }
@@ -72,7 +74,14 @@ var handler = function(request, response) {
         msgObject.text = msg.text;
         msgObject.message = msg.message;
         msgObject.roomname = msg.roomname;
-        messageArray.push(msgObject);
+
+        fs.appendFile(messagelog,JSON.stringify(msgObject) + '\n',function(err) {
+          if(err) {
+            console.log(err);
+          }
+        });
+
+        // messageArray.push(msgObject);
         respond('hi', 201);
       });
   };

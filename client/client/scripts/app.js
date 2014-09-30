@@ -95,7 +95,7 @@ app.addMessages = function(results) {
   results = results.results;
 
   for(var i =0; i < results.length; i++) {
-    console.log('results [i]',results[i]);
+    // console.log('results [i]',results[i]);
     app.addMessage(results[i]);
   }
 };
