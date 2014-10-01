@@ -1,3 +1,5 @@
+var express = require("express");
+var app = express();
 var http = require("http");
 var handler = require('./request-handler');
 var utils = require('./util')
@@ -13,7 +15,13 @@ var port = 3000;
 
 var server = http.createServer(function(request, response) {
 
+  app.get('/classes/messages',function(req,res) {
+    console.log('object object');
+    res.send("object object");
+  });
+
   var path = urlParser.parse(request.url).pathname;
+  console.log(path);
   router[path] ? router[path](request, response) : utils.sendData(response, null, 404);
 
 });
@@ -21,7 +29,8 @@ var server = http.createServer(function(request, response) {
 var router = {
   '/classes/messages' : handler.handler,
   '/classes/users' : handler.handler,
-  '/classes/rooms' : handler.handler
+  '/classes/rooms' : handler.handler,
+  '/?' : handler.handler,
 }
 
 server.listen(port, ip);

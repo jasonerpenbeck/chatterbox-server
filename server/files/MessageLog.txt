@@ -16,3 +16,10 @@
 {"createdAt":"2014-10-01T02:17:28.720Z","updatedAt":"2014-10-01T02:17:28.720Z","objectID":2,"username":"Anon","text":"EVERYTHING","roomname":"default"}
 {"createdAt":"2014-10-01T02:17:29.377Z","updatedAt":"2014-10-01T02:17:29.377Z","objectID":2,"username":"Anon","text":"EVERYTHING","roomname":"default"}
 {"createdAt":"2014-10-01T02:17:29.546Z","updatedAt":"2014-10-01T02:17:29.546Z","objectID":2,"username":"Anon","text":"EVERYTHING","roomname":"default"}
+{"createdAt":"2014-10-01T02:26:47.985Z","updatedAt":"2014-10-01T02:26:47.985Z","objectID":2,"username":"Anon","text":"object object","roomname":"default"}
+{"createdAt":"2014-10-01T02:27:58.311Z","updatedAt":"2014-10-01T02:27:58.312Z","objectID":2,"username":"Anon","text":"object object","roomname":"default"}
+{"createdAt":"2014-10-01T02:27:58.936Z","updatedAt":"2014-10-01T02:27:58.936Z","objectID":2,"username":"Anon","text":"object object","roomname":"default"}
+{"createdAt":"2014-10-01T02:27:59.081Z","updatedAt":"2014-10-01T02:27:59.081Z","objectID":2,"username":"Anon","text":"object object","roomname":"default"}
+{"createdAt":"2014-10-01T02:47:48.648Z","updatedAt":"2014-10-01T02:47:48.649Z","objectID":2,"username":"Anon","text":"hi?","roomname":"default"}
+{"createdAt":"2014-10-01T02:52:24.668Z","updatedAt":"2014-10-01T02:52:24.668Z","objectID":2,"username":"Anon","text":"string string","roomname":"default"}
+{"createdAt":"2014-10-01T02:54:15.434Z","updatedAt":"2014-10-01T02:54:15.434Z","objectID":2,"username":"Anon","text":"num num","roomname":"default"}

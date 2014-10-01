@@ -26,7 +26,7 @@ exports.handler = function(request, response) {
     },
 
     POST: function(request, response) {
-      console.log('INSIDE POST')
+      // console.log('INSIDE POST')
       utils.receiveData(request, function(msg) {
 
         objectID++;

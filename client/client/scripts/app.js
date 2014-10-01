@@ -72,7 +72,7 @@ app.fetch = function (callback,room) {
 
   $.ajax({
     url: this.server,
-    data: {"order": "-createAt"},
+    // data: {"order": "-createAt"},
     type: 'GET',
     dataType: 'json',
     success: function(data) {
