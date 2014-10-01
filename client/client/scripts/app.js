@@ -1,7 +1,7 @@
 var app = {};
 app.defaultRoom = 'default';
 app.roomChoice = app.defaultRoom;
-app.server = 'http://127.0.0.1:3000';
+app.server = 'http://127.0.0.1:3000/classes/messages';
 // app.server = 'https://api.parse.com/1/classes/chatterbox';
 app.friends = [];
 app.username = 'Anon';
@@ -158,7 +158,6 @@ app.handleSubmit = function() {
   message.username = app.username || 'Anonymous';
   message.text = $('#message').val();
   message.roomname = app.roomChoice;
-  console.log(message)
 
   app.send(message,app.displayMessage);
   // app.fetch(app.addMessages,app.roomChoice);

@@ -1,99 +1,56 @@
 var fs = require('fs');
 var _ = require('underscore');
+var utils = require('./util');
 
-/* You should implement your request handler function in this file.
- * And hey! This is already getting passed to http.createServer()
- * in basic-server.js. But it won't work as is.
- * You'll have to figure out a way to export this function from
- * this file and include it in basic-server.js so that it actually works.
- * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
-
-var handler = function(request, response) {
+exports.handler = function(request, response) {
 
   var messagelog = './files/MessageLog.txt';
-  // var messageArray = [];
+  var objectID = 1;
 
-  var respond = function(arg, statuscode) {
-    var statusCode = statuscode;
-    var headers = defaultCorsHeaders;
-    headers['Content-Type'] = "text/plain";
-    response.writeHead(statusCode, headers);
-    response.end(arg);
-  };
+  var actionMap = {
 
-  var router = {
-    GET: function() {
-      if(request.url[1] === '?' || request.url === '/classes/messages' || request.url === '' || request.url.slice(0,13) === '/classes/room') {
+    GET: function(request, response) {
 
-        fs.readFile(messagelog,'utf8', function(err, data) {
-          if(err) {
-            console.log(err);
-          } else {
-            var messageArray = data.trim().split('\n');
-            for (var i=0; i<messageArray.length; i++) {
-              console.log('messageArray pre-JSON: ',messageArray[i]);
-              messageArray[i] = JSON.parse(messageArray[i]);
-              console.log('messageArray post-JSON: ',messageArray[i]);
-              }
-            var responseObject = {results: messageArray};
-            respond(JSON.stringify(responseObject), 200);
-          }
-        });
+      fs.readFile(messagelog,'utf8', function(err, data) {
+        if(err) {
+          console.log(err);
+        } else {
+          var messageArray = data.trim().split('\n');
 
-      } else {
-        respond('404', 404);
-      }
+          _.each(messageArray, function(elem,i) { messageArray[i] = JSON.parse(elem);});
+          var responseObject = {results: messageArray.reverse()};
+          utils.sendData(response, JSON.stringify(responseObject));
+
+        }
+      });
     },
-    POST: function() {
-      addMessage();
+
+    POST: function(request, response) {
+      console.log('INSIDE POST')
+      utils.receiveData(request, function(msg) {
+
+        objectID++;
+
+        var msgObject = {
+          createdAt: new Date().toJSON(),
+          updatedAt: new Date().toJSON(),
+          objectID: objectID,
+          username: msg.username,
+          text: msg.text || msg.message,
+          message: msg.message,
+          roomname: msg.roomname
+        }
+        fs.appendFile(messagelog, JSON.stringify(msgObject) + '\n',function(err) {if(err) {console.log(err);}});
+        utils.sendData(response, JSON.stringify({objectID: msgObject.objectID}), 201);
+      });
     },
-    def: function() {
-      respond('hi',200);
+
+    OPTIONS: function(request, response) {
+      utils.sendData(response, null, 200);
     }
   };
 
-  if (router[request.method]) {
-    router[request.method]();
-  }
-  else {
-    router.def();
-  }
-
-  function addMessage() {
-
-    var msgObject = {
-      createdAt: new Date().toJSON(),
-      updatedAt: new Date().toJSON()
-    };
-
-      var msgstring = "";
-      request.on('data', function(arg) {msgstring+=arg;});
-      request.on('end', function() {
-        var msg = JSON.parse(msgstring);
-        msgObject.username = msg.username;
-        msgObject.text = msg.text;
-        msgObject.message = msg.message;
-        msgObject.roomname = msg.roomname;
-
-        fs.appendFile(messagelog,JSON.stringify(msgObject) + '\n',function(err) {
-          if(err) {
-            console.log(err);
-          }
-        });
-
-        // messageArray.push(msgObject);
-        respond('hi', 201);
-      });
-  };
+//ACTIVATE ACTIONMAP
+  actionMap[request.method] ? actionMap[request.method](request, response) : utils.sendData(response, null, 404)
 
 };
-
-
-var defaultCorsHeaders = {
-  "access-control-allow-origin": "*",
-  "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "access-control-allow-headers": "content-type, accept",
-  "access-control-max-age": 10 // Seconds.
-};
-
-exports.handler = handler;
